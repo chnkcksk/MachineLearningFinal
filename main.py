@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import simpledialog
 import speech_recognition as sr
 import requests
 import webbrowser
@@ -10,22 +9,22 @@ def recognize_speech():
     # Ses tanıma için recognizer nesnesi
     r = sr.Recognizer()
 
-    # Mikrofon ile ses yakaladik
+    # Mikrofon ile ses yakalama
     with sr.Microphone() as source:
         audio = r.listen(source)
 
-    # Google Web Speech API kullanarak sesi metne çevirdik
+    # Google web speech API kullanarak sesi metne çeviriyoruz
     try:
         text = r.recognize_google(audio, language='tr-TR')
 
-        # Web araması sorgusu kontrolü
+        # Web aramasini kontrol
         if "web'de ara" in text:
             search_query = text.replace("web'de ara", "").strip()
             url = f"https://www.google.com/search?q={search_query}"
             webbrowser.open(url)
             response_text = f"{search_query} için web araması yapılıyor."
         else:
-            # Diğer durumlar için mevcut işlevsellik
+
             if "bugünün tarihi ne" in text:
                 today = datetime.now()
                 date_today = today.strftime("%d/%m/%Y")
@@ -49,7 +48,7 @@ def recognize_speech():
             else:
                 response_text = text
 
-        # Sonucu GUI'de göster
+        # Sonucu GUI'de gösteren kod
         result_label.config(text=response_text)
 
     except sr.UnknownValueError:
@@ -58,12 +57,13 @@ def recognize_speech():
         result_label.config(text=f"Google Web Speech API servisinden yanıt alınamadı; {e}")
 
 
-# GUI oluşturma
+# -------------------- GUI oluşturmak icin gereken kodumuz -----------------------
 root = tk.Tk()
 root.title("Sesli Komut Asistanı")
 root.geometry("500x300")
 
-# Kullanıcıya talimat veren etiket
+
+# Kullanıcıya bilgi veren yazi
 instruction_label = tk.Label(root, text=" Lütfen 'Dinle' düğmesine basın ve mikrofona konuşun.\n")
 instruction_label.pack(padx=10, pady=10)
 
@@ -73,11 +73,11 @@ instruction_label = tk.Label(root, text="Örnek:\n"
                                         "Web'de ara Hitit Tarihi")
 instruction_label.pack()
 
-# Sonucu gösteren etiket
+# Sonucu gösteren kisim
 result_label = tk.Label(root, text="", wraplength=500)
 result_label.pack()
 
-# 'Dinle' düğmesi
+# Dinle düğmesi
 listen_button = tk.Button(root,
                           text="Dinle",
                           command=recognize_speech,
@@ -86,5 +86,6 @@ listen_button = tk.Button(root,
                           height=2)
 listen_button.pack(padx=10, pady=10)
 
-# GUI'yi başlat
 root.mainloop()
+
+#-----------------------------------------------------------------------------------
